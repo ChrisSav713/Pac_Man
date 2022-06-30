@@ -1,0 +1,40 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: black;
+    font-size: 0;
+}
+
+.row div {
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+}
+
+.empty {}
+
+.brick {
+    background: url("./assets/wall.png");
+    background-position: center;
+    background-size: cover;
+}
+
+.coin {
+    background: url("./assets/yellowDot.png");
+    background-position: center;
+    background-size: cover;
+}
+
+#pacman {
+    background: url("./assets/pac1.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+}
