@@ -1,32 +1,59 @@
+var pacmanInterval;
+var ghostInterval;
+
 var pacman = {
     el: document.querySelector("#pacman"),
     row: 13,
     col: 10
 };
 
-document.addEventListener("keydown", movePacman);
+var ghost1 = {
+    el: document.querySelector("#ghost1"),
+    row: 6,
+    col: 8
+};
 
+var ghost2 = {
+    el: document.querySelector("#ghost2"),
+    row: 6,
+    col: 12
+};
+
+var ghost3 = {
+    el: document.querySelector("#ghost3"),
+    row: 8,
+    col: 8
+};
+
+var ghost4 = {
+    el: document.querySelector("#ghost4"),
+    row: 8,
+    col: 12
+};
+
+document.addEventListener("keydown", movePacman);
 
 var blockType = {
     0: 'brick',
     1: 'empty',
-    2: 'coin'
+    2: 'coin',
+    3: 'ghost'
 };
 
 var world = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0],
-    [0, 2, 0, 0, 0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0],
-    [0, 2, 0, 0, 0, 2, 0, 2, 0, 2, 2, 2, 2, 2, 0, 2, 0, 0, 0, 2, 0],
-    [0, 2, 2, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 2, 0, 2, 0, 2, 2, 2, 0],
-    [0, 2, 0, 2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 0, 2, 0],
+    [0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 2, 0, 2, 0, 2, 0],
+    [0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 2, 2, 2, 2, 0, 2, 0, 2, 0, 2, 0],
+    [0, 2, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 0, 2, 0],
+    [0, 2, 2, 2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 0],
     [0, 2, 0, 2, 0, 2, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2, 0, 2, 0, 2, 0],
     [0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 2, 0],
     [0, 2, 0, 2, 0, 2, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2, 0, 2, 0, 2, 0],
-    [0, 2, 0, 2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 0, 2, 0],
-    [0, 2, 2, 2, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 2, 2, 2, 0],
-    [0, 2, 0, 0, 0, 2, 0, 2, 2, 2, 2, 2, 2, 2, 0, 2, 0, 0, 0, 2, 0],
+    [0, 2, 2, 2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 0],
     [0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0],
+    [0, 2, 0, 2, 0, 2, 0, 2, 2, 2, 2, 2, 2, 2, 0, 2, 0, 2, 0, 2, 0],
+    [0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 2, 0, 2, 0],
     [0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
@@ -64,13 +91,98 @@ function updatePacman() {
     pacman.el.style.left = (pacman.col * 30) + "px";
 }
 
-document.querySelector(".world").innerHTML = displayWorld();
+function updateGhost() {
+    ghost1.el.style.top = (ghost1.row * 30) + "px";
+    ghost1.el.style.left = (ghost1.col * 30) + "px";
 
-setInterval(function() {
+    ghost2.el.style.top = (ghost2.row * 30) + "px";
+    ghost2.el.style.left = (ghost2.col * 30) + "px";
+
+    ghost3.el.style.top = (ghost3.row * 30) + "px";
+    ghost3.el.style.left = (ghost3.col * 30) + "px";
+
+    ghost4.el.style.top = (ghost4.row * 30) + "px";
+    ghost4.el.style.left = (ghost4.col * 30) + "px";
+}
+
+function startTimer() {
+    pacmanInterval = setInterval(pacmanIntervalTick, 150);
+    ghostInterval = setInterval(ghostIntervalTick, 1000);
+}
+
+function stopTimer() {
+    clearInterval(pacmanInterval);
+    clearInterval(ghostInterval);
+}
+
+function pacmanIntervalTick() {
     document.querySelector(".world").innerHTML = displayWorld();
     updatePacman();
-    //console.log("tick");
-}, 150);
+    checkCollision();
+    console.log("tick");
+}
+
+function ghostIntervalTick() {
+    moveGhost(ghost1);
+    moveGhost(ghost2);
+    moveGhost(ghost3);
+    moveGhost(ghost4);
+    updateGhost();
+}
+
+function checkCollision() {
+    if (pacman.row == ghost1.row && pacman.col == ghost1.col) {
+        stopTimer();
+    }
+    if (pacman.row == ghost2.row && pacman.col == ghost2.col) {
+        stopTimer();
+    }
+    if (pacman.row == ghost3.row && pacman.col == ghost3.col) {
+        stopTimer();
+    }
+    if (pacman.row == ghost4.row && pacman.col == ghost4.col) {
+        stopTimer();
+    }
+
+}
+
+function moveGhost(ghost) {
+    let foundMove = false;
+    while (foundMove == false) {
+        let randomMove = Math.floor(Math.random() * 4);
+        console.log(foundMove + " " + randomMove);
+        switch (randomMove) {
+            case 0: //LEFT
+                var newLoc = world[ghost.row][ghost.col - 1];
+                if (newLoc != 0) {
+                    foundMove = true;
+                    ghost.col--;
+                }
+                break;
+            case 1: //RIGHT
+                var newLoc = world[ghost.row][ghost.col + 1];
+                if (newLoc != 0) {
+                    foundMove = true;
+                    ghost.col++;
+                }
+                break;
+            case 2: //DOWN
+                var newLoc = world[ghost.row + 1][ghost.col];
+                if (newLoc != 0) {
+                    foundMove = true;
+                    ghost.row++;
+                }
+                break;
+            case 3: //UP
+                var newLoc = world[ghost.row - 1][ghost.col];
+                if (newLoc != 0) {
+                    foundMove = true;
+                    ghost.row--;
+                }
+                break;
+        }
+    }
+}
 
 function movePacman(e) {
     console.log(e.keyCode);
@@ -155,3 +267,10 @@ function printToConsole() {
     }
     return output;
 }
+
+
+//initial world printing
+startTimer();
+document.querySelector(".world").innerHTML = displayWorld();
+updatePacman();
+updateGhost();

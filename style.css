@@ -23,6 +23,12 @@ body {
     background-size: cover;
 }
 
+.ghost {
+    background: url("./assets/ghost.png");
+    background-position: center;
+    background-size: cover;
+}
+
 .coin {
     background: url("./assets/yellowDot.png");
     background-position: center;
@@ -33,7 +39,47 @@ body {
     background: url("./assets/pac1.png");
     background-repeat: no-repeat;
     background-position: center;
-    background-size: contain;
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+}
+
+#ghost1 {
+    background: url("./assets/ghost.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+}
+
+#ghost2 {
+    background: url("./assets/ghost.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+}
+
+#ghost3 {
+    background: url("./assets/ghost.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+}
+
+#ghost4 {
+    background: url("./assets/ghost.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
     width: 30px;
     height: 30px;
     position: absolute;
