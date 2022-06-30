@@ -1,37 +1,15 @@
 var pacmanInterval;
 var ghostInterval;
-
-var pacman = {
-    el: document.querySelector("#pacman"),
-    row: 13,
-    col: 10
-};
-
-var ghost1 = {
-    el: document.querySelector("#ghost1"),
-    row: 6,
-    col: 8
-};
-
-var ghost2 = {
-    el: document.querySelector("#ghost2"),
-    row: 6,
-    col: 12
-};
-
-var ghost3 = {
-    el: document.querySelector("#ghost3"),
-    row: 8,
-    col: 8
-};
-
-var ghost4 = {
-    el: document.querySelector("#ghost4"),
-    row: 8,
-    col: 12
-};
+var pacman;
+var ghost1;
+var ghost2;
+var ghost3;
+var ghost4;
+var world;
 
 document.addEventListener("keydown", movePacman);
+document.addEventListener("click", initialize);
+score = document.querySelector("#score-count");
 
 var blockType = {
     0: 'brick',
@@ -40,23 +18,63 @@ var blockType = {
     3: 'ghost'
 };
 
-var world = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0],
-    [0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 2, 0, 2, 0, 2, 0],
-    [0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 2, 2, 2, 2, 0, 2, 0, 2, 0, 2, 0],
-    [0, 2, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 0, 2, 0],
-    [0, 2, 2, 2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 0],
-    [0, 2, 0, 2, 0, 2, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2, 0, 2, 0, 2, 0],
-    [0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 2, 0],
-    [0, 2, 0, 2, 0, 2, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2, 0, 2, 0, 2, 0],
-    [0, 2, 2, 2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 0],
-    [0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0],
-    [0, 2, 0, 2, 0, 2, 0, 2, 2, 2, 2, 2, 2, 2, 0, 2, 0, 2, 0, 2, 0],
-    [0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 2, 0, 2, 0],
-    [0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-];
+//initial world printing
+function initialize() {
+    world = [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0],
+        [0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 2, 0, 2, 0, 2, 0],
+        [0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 2, 2, 2, 2, 0, 2, 0, 2, 0, 2, 0],
+        [0, 2, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 0, 2, 0],
+        [0, 2, 2, 2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 0],
+        [0, 2, 0, 2, 0, 2, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2, 0, 2, 0, 2, 0],
+        [0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 2, 0],
+        [0, 2, 0, 2, 0, 2, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2, 0, 2, 0, 2, 0],
+        [0, 2, 2, 2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 0],
+        [0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0],
+        [0, 2, 0, 2, 0, 2, 0, 2, 2, 2, 2, 2, 2, 2, 0, 2, 0, 2, 0, 2, 0],
+        [0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 2, 0, 2, 0],
+        [0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    ];
+
+    pacman = {
+        el: document.querySelector("#pacman"),
+        row: 13,
+        col: 10
+    };
+
+    ghost1 = {
+        el: document.querySelector("#ghost1"),
+        row: 6,
+        col: 8
+    };
+
+    ghost2 = {
+        el: document.querySelector("#ghost2"),
+        row: 6,
+        col: 12
+    };
+
+    ghost3 = {
+        el: document.querySelector("#ghost3"),
+        row: 8,
+        col: 8
+    };
+
+    ghost4 = {
+        el: document.querySelector("#ghost4"),
+        row: 8,
+        col: 12
+    };
+
+    score.innerHTML = "0";
+    startTimer();
+    document.querySelector(".world").innerHTML = displayWorld();
+    updatePacman();
+    updateGhost();
+    document.querySelector("#gameover").style.visibility = "hidden";
+}
 
 
 function displayWorld() {
@@ -133,15 +151,19 @@ function ghostIntervalTick() {
 function checkCollision() {
     if (pacman.row == ghost1.row && pacman.col == ghost1.col) {
         stopTimer();
+        document.querySelector("#gameover").style.visibility = "visible";
     }
     if (pacman.row == ghost2.row && pacman.col == ghost2.col) {
         stopTimer();
+        document.querySelector("#gameover").style.visibility = "visible";
     }
     if (pacman.row == ghost3.row && pacman.col == ghost3.col) {
         stopTimer();
+        document.querySelector("#gameover").style.visibility = "visible";
     }
     if (pacman.row == ghost4.row && pacman.col == ghost4.col) {
         stopTimer();
+        document.querySelector("#gameover").style.visibility = "visible";
     }
 
 }
@@ -199,6 +221,7 @@ function movePacman(e) {
                     break;
                 case 2: //coin
                     pacman.col--;
+                    score.innerHTML = parseInt(score.innerHTML) + 10;
                     world[pacman.row][pacman.col] = 1;
                     pacman.el.style.transform = "rotate(" + 180 + "deg)";
                     break;
@@ -215,6 +238,7 @@ function movePacman(e) {
                     break;
                 case 2: //coin
                     pacman.col++;
+                    score.innerHTML = parseInt(score.innerHTML) + 10;
                     world[pacman.row][pacman.col] = 1;
                     pacman.el.style.transform = "rotate(" + 0 + "deg)";
                     break;
@@ -231,6 +255,7 @@ function movePacman(e) {
                     break;
                 case 2: //coin
                     pacman.row++;
+                    score.innerHTML = parseInt(score.innerHTML) + 10;
                     world[pacman.row][pacman.col] = 1;
                     pacman.el.style.transform = "rotate(" + 90 + "deg)";
                     break;
@@ -247,6 +272,7 @@ function movePacman(e) {
                     break;
                 case 2: //coin
                     pacman.row--;
+                    score.innerHTML = parseInt(score.innerHTML) + 10;
                     world[pacman.row][pacman.col] = 1;
                     pacman.el.style.transform = "rotate(" + 270 + "deg)";
                     break;
@@ -268,9 +294,4 @@ function printToConsole() {
     return output;
 }
 
-
-//initial world printing
-startTimer();
-document.querySelector(".world").innerHTML = displayWorld();
-updatePacman();
-updateGhost();
+initialize();

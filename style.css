@@ -15,6 +15,25 @@ body {
     display: inline-block;
 }
 
+#score {
+    font-size: 20px;
+    width: 630px;
+    height: 50px;
+    display: flex;
+    color: white;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#score-count {
+    padding-right: 20px;
+}
+
+#logo {
+    height: inherit;
+    width: auto;
+}
+
 .empty {}
 
 .brick {
@@ -83,4 +102,22 @@ body {
     width: 30px;
     height: 30px;
     position: absolute;
+}
+
+#gameover {
+    position: absolute;
+    background: url("./assets/gameover.png");
+    height: 300px;
+    width: 300px;
+    background-position: center;
+    background-size: cover;
+    top: 25%;
+    left: 25%;
+}
+
+#reset {
+    position: relative;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%);
 }
