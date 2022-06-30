@@ -125,7 +125,7 @@ function updateGhost() {
 
 function startTimer() {
     pacmanInterval = setInterval(pacmanIntervalTick, 150);
-    ghostInterval = setInterval(ghostIntervalTick, 1000);
+    ghostInterval = setInterval(ghostIntervalTick, 500);
 }
 
 function stopTimer() {
@@ -137,6 +137,7 @@ function pacmanIntervalTick() {
     document.querySelector(".world").innerHTML = displayWorld();
     updatePacman();
     checkCollision();
+    checkIfWon();
     console.log("tick");
 }
 
@@ -146,27 +147,51 @@ function ghostIntervalTick() {
     moveGhost(ghost3);
     moveGhost(ghost4);
     updateGhost();
+    checkCollision();
 }
 
 function checkCollision() {
     if (pacman.row == ghost1.row && pacman.col == ghost1.col) {
         stopTimer();
+        document.querySelector("#gameover").style.background = "url(\"./assets/gameover.png\"";
+        document.querySelector("#gameover").style.backgroundSize = "cover";
         document.querySelector("#gameover").style.visibility = "visible";
     }
     if (pacman.row == ghost2.row && pacman.col == ghost2.col) {
         stopTimer();
+        document.querySelector("#gameover").style.background = "url(\"./assets/gameover.png\"";
+        document.querySelector("#gameover").style.backgroundSize = "cover";
         document.querySelector("#gameover").style.visibility = "visible";
     }
     if (pacman.row == ghost3.row && pacman.col == ghost3.col) {
         stopTimer();
+        document.querySelector("#gameover").style.background = "url(\"./assets/gameover.png\"";
+        document.querySelector("#gameover").style.backgroundSize = "cover";
         document.querySelector("#gameover").style.visibility = "visible";
     }
     if (pacman.row == ghost4.row && pacman.col == ghost4.col) {
         stopTimer();
+        document.querySelector("#gameover").style.background = "url(\"./assets/gameover.png\"";
+        document.querySelector("#gameover").style.backgroundSize = "cover";
         document.querySelector("#gameover").style.visibility = "visible";
     }
-
 }
+
+function checkIfWon() {
+    let won = true;
+    for (row = 0; row < world.length; row++) {
+        for (col = 0; col < world[row].length; col++) {
+            if (world[row][col] == 2) { won = false; }
+        }
+    }
+    if (won == true) {
+        stopTimer();
+        document.querySelector("#gameover").style.background = "url(\"./assets/youwin.png\"";
+        document.querySelector("#gameover").style.backgroundSize = "cover";
+        document.querySelector("#gameover").style.visibility = "visible";
+    }
+}
+
 
 function moveGhost(ghost) {
     let foundMove = false;
